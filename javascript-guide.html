@@ -1,0 +1,722 @@
+<!doctype html>
+<html lang="hi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>JavaScript: Shuruaat se Advanced Tak</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #172033;
+      --muted: #526078;
+      --accent: #6d4aff;
+      --paper: #ffffff;
+      --page: #f3f5fb;
+      --code: #111827;
+      --line: #e1e6f0;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      max-width: 1050px;
+      margin: 0 auto;
+      padding: 32px 22px 64px;
+      color: var(--ink);
+      background: var(--page);
+      font: 16px/1.7 system-ui, -apple-system, "Segoe UI", sans-serif;
+    }
+
+    header, main, footer {
+      padding: 28px clamp(20px, 5vw, 52px);
+      background: var(--paper);
+    }
+
+    header {
+      border-radius: 18px 18px 0 0;
+      background: linear-gradient(130deg, #21164a, #6d4aff);
+      color: white;
+    }
+
+    main { border-radius: 0 0 18px 18px; }
+    h1 { margin: 0 0 8px; font-size: clamp(2rem, 5vw, 3.2rem); line-height: 1.15; }
+    h2 { margin-top: 48px; padding-bottom: 8px; border-bottom: 2px solid var(--line); }
+    h3 { margin-top: 28px; }
+    a { color: var(--accent); }
+    header p { max-width: 720px; margin-bottom: 0; color: #eeeaff; }
+    .note, .tip {
+      margin: 18px 0;
+      padding: 14px 18px;
+      border-left: 4px solid var(--accent);
+      border-radius: 6px;
+      background: #f2efff;
+    }
+    .tip { border-color: #16856b; background: #eaf8f3; }
+    .explain {
+      margin: 18px 0;
+      padding: 16px 20px;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background: #fbfcff;
+    }
+    .explain h3 { margin-top: 0; }
+    .explain li { margin: 6px 0; }
+    .toc { columns: 2; padding-left: 22px; }
+    .toc li { break-inside: avoid; margin: 4px 0; }
+    pre {
+      overflow-x: auto;
+      margin: 14px 0 20px;
+      padding: 18px;
+      border-radius: 10px;
+      color: #e5e7eb;
+      background: var(--code);
+      font: 14px/1.6 Consolas, "Courier New", monospace;
+    }
+    code { font-family: Consolas, "Courier New", monospace; }
+    p code, li code { padding: 2px 5px; border-radius: 4px; background: #eef0f7; }
+    table { width: 100%; border-collapse: collapse; margin: 16px 0; }
+    th, td { padding: 10px 12px; border: 1px solid var(--line); text-align: left; vertical-align: top; }
+    th { background: #f5f3ff; }
+    footer { margin-top: 2px; border-radius: 0 0 18px 18px; color: var(--muted); }
+    @media (max-width: 620px) {
+      body { padding: 12px 10px 30px; }
+      .toc { columns: 1; }
+      header, main, footer { padding: 22px 18px; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>JavaScript: Shuruaat se Advanced Tak</h1>
+    <p>Hindi/Hinglish mein step-by-step guide: basics, browser, async JavaScript, modules aur ek chhota project. Har topic ke saath code examples diye gaye hain.</p>
+  </header>
+
+  <main>
+    <h2>Is guide ko kaise padhein</h2>
+    <ol>
+      <li>Har lesson ka code khud type karke browser ke Console ya Node.js mein run karein.</li>
+      <li>Output samajhne ke baad values badal kar experiment karein.</li>
+      <li>Ant mein diye gaye project ko bina copy kiye banane ki koshish karein.</li>
+    </ol>
+    <div class="note"><strong>Setup:</strong> Browser mein F12 dabakar Console khol sakte hain. Local JavaScript file chalane ke liye Node.js install karke terminal mein <code>node app.js</code> chalayein. DOM wale lessons browser mein HTML page ke saath chalenge.</div>
+
+    <h2>Course ke lessons</h2>
+    <ol class="toc">
+      <li><a href="#intro">JavaScript kya hai</a></li>
+      <li><a href="#variables">Variables aur data types</a></li>
+      <li><a href="#operators">Operators aur conversions</a></li>
+      <li><a href="#conditions">Conditions aur loops</a></li>
+      <li><a href="#functions">Functions aur scope</a></li>
+      <li><a href="#arrays">Arrays</a></li>
+      <li><a href="#objects">Objects aur JSON</a></li>
+      <li><a href="#strings">Strings, numbers aur dates</a></li>
+      <li><a href="#errors">Errors aur debugging</a></li>
+      <li><a href="#dom">HTML ke saath DOM</a></li>
+      <li><a href="#events">Events aur forms</a></li>
+      <li><a href="#async">Asynchronous JavaScript</a></li>
+      <li><a href="#storage">Web storage</a></li>
+      <li><a href="#modules">Modules aur npm</a></li>
+      <li><a href="#modern">Modern JavaScript concepts</a></li>
+      <li><a href="#project">Practice project</a></li>
+      <li><a href="#next">Aage kya seekhein</a></li>
+    </ol>
+
+    <section id="intro">
+      <h2>1. JavaScript kya hai?</h2>
+      <p>JavaScript ek programming language hai. Browser mein ye web page ko interactive banati hai; Node.js ke saath server aur command-line programs bhi likhe ja sakte hain. HTML structure deta hai, CSS style deta hai, aur JavaScript behavior sambhalti hai.</p>
+      <pre><code>console.log("Namaste, JavaScript!");
+alert("Ye message browser mein dikhega");</code></pre>
+      <p><code>console.log()</code> debugging aur output dekhne ke kaam aata hai. Browser ka <code>alert()</code> sirf chhote demo ke liye use karein.</p>
+      <div class="explain">
+        <h3>Is code ka matlab</h3>
+        <ul>
+          <li><code>console.log(...)</code> diye gaye text ko developer Console mein print karta hai.</li>
+          <li>Quotes ke andar likha hua text string hota hai; yahan wahi message print ho raha hai.</li>
+          <li><code>alert(...)</code> browser mein popup dikhata hai. Ye user ko rokta hai, isliye asli websites mein aam taur par page par hi message dikhate hain.</li>
+          <li>JavaScript ke statements aksar alag lines mein likhe jaate hain. Semicolon optional ho sakta hai, lekin ek style chun kar consistent rehna achha hai.</li>
+        </ul>
+      </div>
+    </section>
+
+    <section id="variables">
+      <h2>2. Variables aur data types</h2>
+      <p>Variable ek naam diya hua box samjhein jisme value rakhte hain. Naye code mein badalne wali value ke liye <code>let</code>, aur dobara assign na hone wale reference ke liye <code>const</code> use karein. Purana <code>var</code> aam taur par avoid karein.</p>
+      <pre><code>const naam = "Aman";       // string
+let umar = 20;             // number
+let studentHai = true;     // boolean
+let address;               // undefined
+const khaali = null;       // jaan-boojhkar khaali
+
+console.log(typeof naam);  // "string"
+console.log(typeof umar);  // "number"</code></pre>
+      <p>JavaScript ke common primitive types: string, number, boolean, undefined, null, bigint aur symbol. Arrays aur objects reference types hain.</p>
+      <div class="tip"><strong>Yaad rakhein:</strong> <code>const</code> object ya array ko immutable nahi banata; sirf us variable ko kisi naye object/array se reassign karne se rokta hai.</div>
+      <pre><code>const rang = ["laal", "neela"];
+rang.push("hara");         // allowed
+// rang = [];              // error: const ko reassign nahi kar sakte</code></pre>
+      <div class="explain">
+        <h3>Is lesson ke points</h3>
+        <ul>
+          <li><code>const naam = ...</code> naam ka variable banakar usmein value rakhta hai. <code>const</code> ko banate waqt value dena zaroori hai.</li>
+          <li><code>let</code> ko baad mein nayi value di ja sakti hai; <code>const</code> wale variable ko dobara assign nahi kar sakte.</li>
+          <li>String text hai, number ginti/measurement hai, boolean sirf <code>true</code> ya <code>false</code> hai.</li>
+          <li>Value na di ho to value <code>undefined</code> hoti hai; <code>null</code> ka matlab jaan-boojhkar khaali value hai.</li>
+          <li><code>typeof</code> value ka type batata hai. <code>typeof null</code> JavaScript ki purani quirk ki wajah se <code>"object"</code> deta hai.</li>
+          <li>Array/object ko <code>const</code> se banane ke baad uske andar ke items/properties badal sakte hain; variable ko kisi doosre array/object se replace nahi kar sakte.</li>
+        </ul>
+      </div>
+    </section>
+
+    <section id="operators">
+      <h2>3. Operators aur type conversion</h2>
+      <pre><code>const a = 10;
+const b = 3;
+
+console.log(a + b);  // 13
+console.log(a - b);  // 7
+console.log(a * b);  // 30
+console.log(a / b);  // 3.333...
+console.log(a % b);  // 1 (remainder)
+
+console.log(5 === "5"); // false: value aur type dono compare
+console.log(5 == "5");  // true: type conversion hota hai</code></pre>
+      <p>Comparison ke liye aam taur par <code>===</code> aur <code>!==</code> use karein. <code>&amp;&amp;</code> (and), <code>||</code> (or), aur <code>!</code> (not) logical operators hain.</p>
+      <pre><code>const scoreText = "42";
+const score = Number(scoreText);
+console.log(score + 8); // 50
+
+const naamInput = "";
+const dikhaneWalaNaam = naamInput || "Guest"; // "Guest"</code></pre>
+      <div class="explain">
+        <h3>Operators ka matlab</h3>
+        <ul>
+          <li><code>+</code> jodta hai, <code>-</code> ghatata hai, <code>*</code> guna karta hai, <code>/</code> bhaag karta hai aur <code>%</code> bhaag ka remainder deta hai.</li>
+          <li><code>===</code> value aur type dono ko compare karta hai. <code>==</code> pehle type badalne ki koshish karta hai, isliye aksar confusing result aa sakta hai.</li>
+          <li><code>&amp;&amp;</code> ka matlab dono conditions true; <code>||</code> ka matlab kam se kam ek true; <code>!</code> result ko ulta karta hai.</li>
+          <li><code>Number("42")</code> text ko number mein badalta hai. Galat numeric text ko convert karne par <code>NaN</code> mil sakta hai.</li>
+          <li><code>||</code> empty string, zero, false, null aur undefined par right-side fallback leta hai. Sirf null/undefined ke liye <code>??</code> istemal hota hai.</li>
+        </ul>
+      </div>
+    </section>
+
+    <section id="conditions">
+      <h2>4. Conditions aur loops</h2>
+      <pre><code>const marks = 76;
+
+if (marks >= 80) {
+  console.log("Bahut achha");
+} else if (marks >= 40) {
+  console.log("Pass");
+} else {
+  console.log("Dobara koshish karein");
+}
+
+const status = marks >= 40 ? "Pass" : "Fail"; // ternary</code></pre>
+      <p>Ek value ke multiple cases ke liye <code>switch</code> ka use kar sakte hain:</p>
+      <pre><code>const day = "Somvar";
+switch (day) {
+  case "Somvar":
+    console.log("Naya hafta");
+    break;
+  case "Ravivar":
+    console.log("Chhutti");
+    break;
+  default:
+    console.log("Aam din");
+}</code></pre>
+      <p>Repeated kaam ke liye loop use karein:</p>
+      <pre><code>for (let i = 1; i <= 3; i++) {
+  console.log("Ginti:", i);
+}
+
+let count = 0;
+while (count < 3) {
+  count++;
+}
+
+for (const rang of ["laal", "neela"]) {
+  console.log(rang);
+}</code></pre>
+      <div class="explain">
+        <h3>Conditions aur loops ka matlab</h3>
+        <ul>
+          <li><code>if</code> condition true hone par block chalata hai; <code>else if</code> doosri condition check karta hai; <code>else</code> tab chalta hai jab upar ki koi condition true na ho.</li>
+          <li><code>marks &gt;= 40</code> ek comparison hai. Iska result boolean hota hai: <code>true</code> ya <code>false</code>.</li>
+          <li>Ternary <code>condition ? valueA : valueB</code> chhota if/else hai aur aksar value chunne ke liye use hota hai.</li>
+          <li><code>switch</code> ek hi value ke alag cases check karta hai. <code>break</code> case ke baad switch se bahar nikalta hai; <code>default</code> koi case match na hone ka fallback hai.</li>
+          <li><code>for</code> loop mein pehla hissa shuruaat (<code>i = 1</code>), doosra chalne ki condition aur teesra har chakkar ke baad update hai.</li>
+          <li><code>while</code> condition true rehne tak chalta hai. Condition ko update na karne par infinite loop ban sakta hai.</li>
+          <li><code>for...of</code> array ke har item par ek-ek baar chalta hai.</li>
+        </ul>
+      </div>
+    </section>
+
+    <section id="functions">
+      <h2>5. Functions aur scope</h2>
+      <p>Function reusable code block hai. Inputs parameters hote hain aur <code>return</code> result deta hai.</p>
+      <pre><code>function jodo(a, b) {
+  return a + b;
+}
+console.log(jodo(4, 6)); // 10
+
+const guna = function (a, b) {
+  return a * b;
+};
+
+const greet = (naam) =&gt; `Namaste, ${naam}!`;
+console.log(greet("Aman"));</code></pre>
+      <p>Arrow function ka short form: <code>(x) =&gt; x * 2</code>. Function ke bahar declare kiya variable global/module scope mein ho sakta hai; function ke andar <code>let</code> ya <code>const</code> se banaya variable us block tak hi rehta hai.</p>
+      <pre><code>function discount(price, percent = 10) {
+  return price - price * percent / 100;
+}
+console.log(discount(200)); // 180
+console.log(discount(200, 25)); // 150</code></pre>
+      <div class="explain">
+        <h3>Function ke points</h3>
+        <ul>
+          <li><code>function jodo(a, b)</code> function define karta hai; <code>a</code> aur <code>b</code> parameters hain, jinhe call karte waqt values milti hain.</li>
+          <li><code>jodo(4, 6)</code> function ko call karta hai. Yahan 4 aur 6 arguments hain.</li>
+          <li><code>return</code> function ka result wapas bhejta hai. <code>return</code> ke baad us function call ka kaam khatam ho jaata hai.</li>
+          <li>Function expression ko variable mein rakha jaata hai; arrow function iska ek chhota syntax hai.</li>
+          <li><code>percent = 10</code> default parameter hai: doosri value na dein to 10 use hota hai.</li>
+          <li>Scope batata hai variable kahan available hai. <code>let</code>/<code>const</code> se bane block variables apne braces ke bahar available nahi hote.</li>
+        </ul>
+      </div>
+    </section>
+
+    <section id="arrays">
+      <h2>6. Arrays</h2>
+      <p>Array ordered list hoti hai. Index zero se shuru hota hai.</p>
+      <pre><code>const fruits = ["aam", "seb", "kela"];
+console.log(fruits[0]); // "aam"
+fruits.push("angoor");  // aakhir mein jodo
+fruits.pop();           // aakhri item hatao
+console.log(fruits.length);</code></pre>
+      <p>Array methods kaafi kaam aate hain:</p>
+      <pre><code>const numbers = [1, 2, 3, 4, 5];
+
+const doubled = numbers.map(n =&gt; n * 2);
+const even = numbers.filter(n =&gt; n % 2 === 0);
+const found = numbers.find(n =&gt; n &gt; 3);
+const total = numbers.reduce((sum, n) =&gt; sum + n, 0);
+
+console.log(doubled); // [2, 4, 6, 8, 10]
+console.log(even);    // [2, 4]
+console.log(found);   // 4
+console.log(total);   // 15</code></pre>
+      <p><code>map</code> aur <code>filter</code> naya array banate hain. <code>sort()</code> original array ko badalta hai; numbers ko sahi order mein sort karne ke liye comparator dein:</p>
+      <pre><code>const values = [10, 2, 30];
+const sorted = [...values].sort((a, b) =&gt; a - b);
+console.log(sorted); // [2, 10, 30]</code></pre>
+      <div class="explain">
+        <h3>Array ke points</h3>
+        <ul>
+          <li>Array ek order wali list hai; pehla item index <code>0</code>, doosra index <code>1</code> par hota hai.</li>
+          <li><code>push</code> aakhir mein item jodta hai; <code>pop</code> aakhri item nikalta hai; <code>length</code> item ki tadaad deta hai.</li>
+          <li><code>map</code> har item ko badal kar utne hi items ka naya array banata hai; yahan har number double hua.</li>
+          <li><code>filter</code> condition pass karne wale items rakhta hai; <code>find</code> pehla matching item deta hai.</li>
+          <li><code>reduce</code> items ko mila kar ek result banata hai; yahan running sum ban raha hai. Aakhri <code>0</code> shuruaati sum hai.</li>
+          <li>Default <code>sort()</code> text ki tarah sort kar sakta hai. <code>(a, b) =&gt; a - b</code> numeric ascending order batata hai.</li>
+          <li><code>[...values]</code> array ki shallow copy hai; isse original array ko sort karne se bachaya gaya.</li>
+        </ul>
+      </div>
+    </section>
+
+    <section id="objects">
+      <h2>7. Objects aur JSON</h2>
+      <p>Object related data ko key-value pairs mein rakhta hai.</p>
+      <pre><code>const user = {
+  naam: "Aman",
+  umar: 20,
+  active: true,
+  greet() {
+    return `Namaste, main ${this.naam} hoon`;
+  }
+};
+
+console.log(user.naam);
+console.log(user["umar"]);
+user.umar = 21;
+console.log(user.greet());</code></pre>
+      <p>Destructuring aur spread se objects kaam karna aasan hota hai:</p>
+      <pre><code>const { naam, umar } = user;
+const updatedUser = { ...user, umar: 22 };
+console.log(naam, umar);
+console.log(updatedUser);</code></pre>
+      <p>JSON data exchange ka text format hai. JSON mein methods/functions nahi hote.</p>
+      <pre><code>const jsonText = JSON.stringify({ naam: "Aman", umar: 20 });
+const parsed = JSON.parse(jsonText);
+console.log(parsed.naam);</code></pre>
+      <div class="explain">
+        <h3>Object aur JSON ke points</h3>
+        <ul>
+          <li>Object mein har property ka naam (key) aur uski value hoti hai, jaise <code>naam: "Aman"</code>.</li>
+          <li><code>user.naam</code> dot notation hai; <code>user["umar"]</code> bracket notation hai. Bracket notation tab kaam aata hai jab key variable mein ho.</li>
+          <li><code>this.naam</code> yahan us object ki <code>naam</code> property leta hai jiske through <code>greet()</code> call hua.</li>
+          <li>Destructuring object se properties nikal kar variables banata hai. Spread <code>...</code> properties copy karta hai; baad mein likhi property purani value ko overwrite kar sakti hai.</li>
+          <li><code>JSON.stringify</code> JavaScript value ko JSON text banata hai; <code>JSON.parse</code> JSON text ko wapas JavaScript value banata hai.</li>
+          <li>JSON parse karte waqt invalid text error de sakta hai. External data parse karte waqt error handling karein.</li>
+        </ul>
+      </div>
+    </section>
+
+    <section id="strings">
+      <h2>8. Strings, numbers aur dates</h2>
+      <pre><code>const first = "Java";
+const second = "Script";
+const full = `${first}${second}`;
+
+console.log(full.toUpperCase());
+console.log("  hello  ".trim());
+console.log("JavaScript".includes("Script"));
+console.log("a,b,c".split(","));
+
+const amount = 12.345;
+console.log(amount.toFixed(2)); // "12.35" (string)</code></pre>
+      <p>Date banane ke liye <code>Date</code> object use karein. Date display user ke timezone ke hisaab se badal sakta hai.</p>
+      <pre><code>const now = new Date();
+console.log(now.toISOString());
+console.log(now.getFullYear());</code></pre>
+      <div class="explain">
+        <h3>Text, number aur date methods</h3>
+        <ul>
+          <li>Template string backtick <code>`</code> se banti hai; <code>${...}</code> ke andar variable ya expression likh sakte hain.</li>
+          <li><code>toUpperCase()</code> text ko uppercase karta hai, <code>trim()</code> shuru/aakhir ke spaces hataata hai, <code>includes()</code> poochta hai ki text maujood hai ya nahi.</li>
+          <li><code>split(",")</code> comma par text ko array mein todta hai.</li>
+          <li><code>toFixed(2)</code> do decimal places dikhata hai, lekin result string hota hai; calculation ke liye number mein convert karna pad sakta hai.</li>
+          <li><code>new Date()</code> abhi ka samay banata hai; <code>toISOString()</code> standard UTC text deta hai, jabki local date display timezone se badal sakta hai.</li>
+        </ul>
+      </div>
+    </section>
+
+    <section id="errors">
+      <h2>9. Errors aur debugging</h2>
+      <p>Developer tools mein Console aur Sources/Debugger ka use karein. <code>console.log()</code>, breakpoints, aur step-through debugging se values check karein.</p>
+      <pre><code>function divide(a, b) {
+  if (b === 0) {
+    throw new Error("Zero se divide nahi kar sakte");
+  }
+  return a / b;
+}
+
+try {
+  console.log(divide(10, 0));
+} catch (error) {
+  console.error("Calculation fail hui:", error.message);
+}</code></pre>
+      <p>Input validation karein aur error ko chupane ke bajay user ya developer ko useful feedback dein.</p>
+      <div class="explain">
+        <h3>Error handling ka matlab</h3>
+        <ul>
+          <li><code>throw new Error(...)</code> batata hai ki function valid result nahi de sakta.</li>
+          <li><code>try</code> ke andar risky code chalta hai; error aaye to normal flow ruk kar <code>catch</code> block mein jaata hai.</li>
+          <li><code>error.message</code> error ka readable message hai; <code>console.error</code> ise Console mein error ke roop mein dikhata hai.</li>
+          <li>Debugger mein breakpoint lagane se execution rukta hai; phir variables ko dekhte hue step-by-step aage badh sakte hain.</li>
+        </ul>
+      </div>
+    </section>
+
+    <section id="dom">
+      <h2>10. HTML ke saath DOM</h2>
+      <p>DOM browser mein HTML page ka object representation hai. Is example ko HTML file mein script ke saath run karein:</p>
+      <pre><code>&lt;h1 id="title"&gt;Purana title&lt;/h1&gt;
+&lt;p class="message"&gt;Yahan message aayega&lt;/p&gt;
+
+&lt;script&gt;
+  const title = document.querySelector("#title");
+  const message = document.querySelector(".message");
+
+  title.textContent = "Naya title";
+  message.textContent = "JavaScript ne page update kiya!";
+  title.classList.add("highlight");
+&lt;/script&gt;</code></pre>
+      <p>HTML content dikhane ke liye user-provided text ke saath <code>innerHTML</code> ke bajay <code>textContent</code> use karein. Naya element banane ka example:</p>
+      <pre><code>const item = document.createElement("li");
+item.textContent = "Naya item";
+document.querySelector("#list").append(item);</code></pre>
+      <div class="explain">
+        <h3>DOM ke points</h3>
+        <ul>
+          <li><code>document</code> current web page ko represent karta hai; DOM us page ka tree hota hai jise JavaScript padh aur badal sakti hai.</li>
+          <li><code>querySelector</code> CSS selector se pehla matching element dhoondhta hai. <code>#title</code> id aur <code>.message</code> class ko select karta hai.</li>
+          <li><code>textContent</code> element ke andar ka plain text badalta hai; <code>classList.add</code> CSS class jodta hai.</li>
+          <li><code>createElement</code> naya element banata hai; <code>append</code> use page ke kisi element ke andar jodta hai.</li>
+          <li>Agar selector ko matching element na mile to result <code>null</code> hota hai. Element ka hona confirm karein ya script ko HTML ke baad load karein.</li>
+        </ul>
+      </div>
+    </section>
+
+    <section id="events">
+      <h2>11. Events aur forms</h2>
+      <p>Event listener click, typing ya form submit par function chalata hai.</p>
+      <pre><code>&lt;button id="helloButton"&gt;Click karein&lt;/button&gt;
+&lt;p id="output"&gt;&lt;/p&gt;
+
+&lt;script&gt;
+  const button = document.querySelector("#helloButton");
+  const output = document.querySelector("#output");
+
+  button.addEventListener("click", () =&gt; {
+    output.textContent = "Button click hua!";
+  });
+&lt;/script&gt;</code></pre>
+      <p>Form submit hone par page reload rokne ke liye <code>preventDefault()</code>:</p>
+      <pre><code>&lt;form id="nameForm"&gt;
+  &lt;input id="nameInput" required placeholder="Apna naam"&gt;
+  &lt;button&gt;Submit&lt;/button&gt;
+&lt;/form&gt;
+&lt;p id="greeting"&gt;&lt;/p&gt;
+
+&lt;script&gt;
+  document.querySelector("#nameForm").addEventListener("submit", (event) =&gt; {
+    event.preventDefault();
+    const name = document.querySelector("#nameInput").value.trim();
+    document.querySelector("#greeting").textContent = `Namaste, ${name}!`;
+  });
+&lt;/script&gt;</code></pre>
+      <div class="explain">
+        <h3>Events aur forms ke points</h3>
+        <ul>
+          <li>Event user ya browser ki activity hai, jaise <code>click</code>, <code>input</code> ya <code>submit</code>.</li>
+          <li><code>addEventListener("click", callback)</code> kehta hai: click hone par callback function chalao.</li>
+          <li>Form ka default submit page reload kar sakta hai; <code>event.preventDefault()</code> us default behavior ko rokta hai.</li>
+          <li><code>input.value</code> field ka text deta hai; <code>trim()</code> extra spaces hataata hai.</li>
+          <li><code>required</code> browser ki basic validation hai. App ko phir bhi input check karna chahiye, kyunki har validation sirf HTML par bharosemand nahi hoti.</li>
+          <li>User ka text page par dikhane ke liye <code>textContent</code> safe choice hai.</li>
+        </ul>
+      </div>
+    </section>
+
+    <section id="async">
+      <h2>12. Asynchronous JavaScript</h2>
+      <p>Network ya timer jaise kaam mein waqt lag sakta hai. Promise baad mein milne wale result ko represent karta hai. <code>async/await</code> asynchronous code ko padhne layak banata hai.</p>
+      <pre><code>console.log("Pehle");
+setTimeout(() =&gt; console.log("Baad mein"), 500);
+console.log("Doosra");</code></pre>
+      <p>Network request ka example (browser):</p>
+      <pre><code>async function loadUser() {
+  try {
+    const response = await fetch("https://jsonplaceholder.typicode.com/users/1");
+    if (!response.ok) {
+      throw new Error(`Request fail: ${response.status}`);
+    }
+    const user = await response.json();
+    console.log(user.name);
+  } catch (error) {
+    console.error("User load nahi hua:", error);
+  }
+}
+
+loadUser();</code></pre>
+      <p>Har <code>await</code> ko aise function ke andar likhein jo <code>async</code> ho. Network error aur non-success HTTP response dono ko handle karein; <code>fetch</code> har HTTP error par apne aap reject nahi hota.</p>
+      <div class="explain">
+        <h3>Async code ka matlab</h3>
+        <ul>
+          <li>JavaScript aam taur par ek waqt mein ek hi kaam chalati hai. Timer/network ke intezar mein poora page rokne ke bajay baaki kaam chalte rehte hain.</li>
+          <li><code>setTimeout</code> callback ko diye gaye minimum delay ke baad chalane ke liye schedule karta hai; isliye output pehle, doosra, phir baad mein hota hai.</li>
+          <li>Promise future result ko represent karta hai: abhi pending, baad mein fulfilled (success) ya rejected (failure).</li>
+          <li><code>async</code> function hamesha Promise return karta hai. <code>await</code> us Promise ke result ka intezar karta hai bina poore browser ko freeze kiye.</li>
+          <li><code>fetch</code> request bhejta hai; <code>response.ok</code> HTTP success check karta hai; <code>response.json()</code> response body ko JavaScript data mein badalta hai.</li>
+          <li><code>try/catch</code> request ya JSON conversion ki failure sambhalta hai. HTTP 404 jaise response ke liye <code>response.ok</code> khud check karna hota hai.</li>
+        </ul>
+      </div>
+    </section>
+
+    <section id="storage">
+      <h2>13. Browser storage</h2>
+      <p><code>localStorage</code> browser mein chhota text-based data reload ke baad bhi rakhta hai. Ismein sensitive information, jaise password, store na karein.</p>
+      <pre><code>const settings = { theme: "dark" };
+localStorage.setItem("settings", JSON.stringify(settings));
+
+const savedText = localStorage.getItem("settings");
+const savedSettings = savedText ? JSON.parse(savedText) : null;
+console.log(savedSettings);
+
+localStorage.removeItem("settings");</code></pre>
+      <p><code>sessionStorage</code> tab/session tak rehta hai. Dono browser-specific hain aur Node.js mein available nahi hote.</p>
+      <div class="explain">
+        <h3>Storage ke points</h3>
+        <ul>
+          <li>Storage mein key aur string value rakhi jaati hai; object ko pehle <code>JSON.stringify</code> karke text banana hota hai.</li>
+          <li><code>setItem</code> save karta hai, <code>getItem</code> padhta hai aur key na mile to <code>null</code> deta hai; <code>removeItem</code> ek key hataata hai.</li>
+          <li><code>savedText ? ... : null</code> check karta hai ki data mila ya nahi, uske baad hi JSON parse hota hai.</li>
+          <li><code>localStorage</code> browser band/reload ke baad bhi rehta hai; <code>sessionStorage</code> aam taur par tab band hone tak rehta hai.</li>
+          <li>Storage same browser/origin ke liye hota hai aur limited hota hai. Password ya secret token jaise sensitive data yahan na rakhein.</li>
+        </ul>
+      </div>
+    </section>
+
+    <section id="modules">
+      <h2>14. Modules aur npm</h2>
+      <p>Modules code ko alag files mein baantte hain. Browser mein entry HTML par <code>type="module"</code> lagayein.</p>
+      <pre><code>// math.js
+export function add(a, b) {
+  return a + b;
+}
+
+// app.js
+import { add } from "./math.js";
+console.log(add(2, 3));</code></pre>
+      <pre><code>&lt;script type="module" src="./app.js"&gt;&lt;/script&gt;</code></pre>
+      <p>npm Node.js ke saath aane wala package manager hai. Project folder mein <code>npm init -y</code> se package setup karein; kisi package ko add karne se pehle uski documentation aur zaroorat check karein.</p>
+      <div class="explain">
+        <h3>Modules aur npm ke points</h3>
+        <ul>
+          <li><code>export</code> doosri file ko function/value istemal karne deta hai; <code>import</code> exported cheez ko laata hai.</li>
+          <li>Named export mein import ka naam braces ke andar aur same hona chahiye; file path bhi sahi hona zaroori hai.</li>
+          <li><code>type="module"</code> browser ko batata hai ki file ES module hai. Modules ko aam taur par local web server se chalayein; seedha <code>file://</code> se kholne par browser rok sakta hai.</li>
+          <li>npm packages install, update aur scripts chalane mein madad karta hai. <code>package.json</code> project metadata, dependencies aur commands rakhta hai.</li>
+          <li>Har dependency project mein extra code laati hai; sirf trusted aur zaroori packages install karein.</li>
+        </ul>
+      </div>
+    </section>
+
+    <section id="modern">
+      <h2>15. Modern JavaScript concepts</h2>
+      <h3>Optional chaining aur nullish coalescing</h3>
+      <pre><code>const city = user.profile?.address?.city ?? "Pata nahi";
+console.log(city);</code></pre>
+      <p><code>?.</code> missing/null value par safe access deta hai. <code>??</code> sirf <code>null</code> ya <code>undefined</code> par fallback deta hai; <code>||</code> zero aur empty string par bhi fallback dega.</p>
+      <h3>Set aur Map</h3>
+      <pre><code>const unique = new Set([1, 1, 2, 3]);
+console.log([...unique]); // [1, 2, 3]
+
+const scores = new Map();
+scores.set("Aman", 90);
+console.log(scores.get("Aman"));</code></pre>
+      <h3>Class</h3>
+      <pre><code>class Animal {
+  constructor(name) {
+    this.name = name;
+  }
+
+  speak() {
+    return `${this.name} awaaz karta hai`;
+  }
+}
+
+const dog = new Animal("Dog");
+console.log(dog.speak());</code></pre>
+      <p>Class JavaScript ke prototype-based object system ka syntax hai. Har problem ke liye class zaroori nahi; simple functions aur objects bhi achha design ho sakte hain.</p>
+      <h3>Promises ko saath chalana</h3>
+      <pre><code>async function loadBoth() {
+  const [first, second] = await Promise.all([
+    fetch("/api/first").then(response =&gt; response.json()),
+    fetch("/api/second").then(response =&gt; response.json())
+  ]);
+  return { first, second };
+}</code></pre>
+      <div class="explain">
+        <h3>Modern features ka matlab</h3>
+        <ul>
+          <li><code>user.profile?.address?.city</code> har level par check karta hai. Beech ki property missing ho to crash ke bajay <code>undefined</code> milta hai.</li>
+          <li><code>?? "Pata nahi"</code> sirf null/undefined par default deta hai; valid value jaise empty string ya zero ko nahi badalta.</li>
+          <li><code>Set</code> duplicate values nahi rakhta; <code>[...unique]</code> Set ko array mein badalta hai.</li>
+          <li><code>Map</code> key-value data rakhta hai; <code>set</code> save karta hai aur <code>get</code> key ki value padhta hai.</li>
+          <li><code>class</code> objects banane ka reusable blueprint hai. <code>constructor</code> naya object bante waqt chalta hai; <code>new</code> object banata hai.</li>
+          <li><code>Promise.all</code> independent Promises ko ek saath start karke sabke results ka intezar karta hai. Koi Promise fail ho to combined Promise bhi reject hota hai.</li>
+        </ul>
+      </div>
+    </section>
+
+    <section id="project">
+      <h2>16. Practice project: To-do list</h2>
+      <p>Is mini project mein DOM, events, arrays aur localStorage ek saath use hote hain. Isse <code>todo.html</code> naam ki file mein save karke browser mein kholein.</p>
+      <pre><code>&lt;!doctype html&gt;
+&lt;html lang="hi"&gt;
+&lt;meta charset="utf-8"&gt;
+&lt;meta name="viewport" content="width=device-width, initial-scale=1"&gt;
+&lt;title&gt;Meri To-do List&lt;/title&gt;
+&lt;h1&gt;Meri To-do List&lt;/h1&gt;
+&lt;form id="todoForm"&gt;
+  &lt;input id="todoInput" required placeholder="Naya kaam"&gt;
+  &lt;button&gt;Jodein&lt;/button&gt;
+&lt;/form&gt;
+&lt;ul id="todoList"&gt;&lt;/ul&gt;
+&lt;script&gt;
+  const form = document.querySelector("#todoForm");
+  const input = document.querySelector("#todoInput");
+  const list = document.querySelector("#todoList");
+  let todos = JSON.parse(localStorage.getItem("todos") || "[]");
+
+  function render() {
+    list.replaceChildren();
+    todos.forEach((todo, index) =&gt; {
+      const item = document.createElement("li");
+      const text = document.createElement("span");
+      text.textContent = todo;
+
+      const removeButton = document.createElement("button");
+      removeButton.type = "button";
+      removeButton.textContent = "Hatao";
+      removeButton.addEventListener("click", () =&gt; {
+        todos.splice(index, 1);
+        saveAndRender();
+      });
+
+      item.append(text, " ", removeButton);
+      list.append(item);
+    });
+  }
+
+  function saveAndRender() {
+    localStorage.setItem("todos", JSON.stringify(todos));
+    render();
+  }
+
+  form.addEventListener("submit", (event) =&gt; {
+    event.preventDefault();
+    const value = input.value.trim();
+    if (!value) return;
+    todos.push(value);
+    input.value = "";
+    saveAndRender();
+  });
+
+  render();
+&lt;/script&gt;
+&lt;/html&gt;</code></pre>
+      <p><strong>Khud se add karein:</strong> kaam complete mark karne ka checkbox, saare kaam clear karne ka button, aur empty list ka message.</p>
+      <div class="explain">
+        <h3>Project kaise kaam karta hai</h3>
+        <ul>
+          <li>Shuru mein <code>querySelector</code> form, input aur list ke HTML elements ko JavaScript variables mein pakadta hai.</li>
+          <li><code>localStorage.getItem</code> purane tasks laata hai; <code>JSON.parse</code> unhe array banata hai. Pehli baar data na ho to <code>[]</code> khaali array milta hai.</li>
+          <li><code>render()</code> purani list saaf karke har task ke liye naya <code>li</code>, text aur delete button banata hai.</li>
+          <li>Delete button click par <code>splice(index, 1)</code> us index ka ek task hataata hai.</li>
+          <li><code>saveAndRender()</code> pehle updated array ko JSON text bana kar save karta hai, phir screen dobara banata hai.</li>
+          <li>Submit handler reload rokta hai, input se spaces hataata hai, khaali text ko chhodta hai, task array mein jodta hai aur input clear karta hai.</li>
+          <li>Har task ko <code>textContent</code> se dikhaya gaya hai, isliye user ka input HTML ke roop mein execute nahi hota.</li>
+          <li><code>render()</code> ka aakhri call page khulte hi saved tasks dikhata hai.</li>
+        </ul>
+      </div>
+    </section>
+
+    <section id="next">
+      <h2>17. Aage kya seekhein</h2>
+      <ol>
+        <li>HTML aur CSS ki basics, phir JavaScript DOM practice.</li>
+        <li>Git/GitHub, browser DevTools, npm aur modules.</li>
+        <li>Testing basics aur code ko chhote reusable functions mein baantna.</li>
+        <li>Apni zaroorat ke mutabik React/Vue, Node.js/Express, ya TypeScript.</li>
+        <li>Har concept ke baad chhota project banayein: calculator, quiz, weather app, expense tracker.</li>
+      </ol>
+      <div class="explain">
+        <h3>Is learning order ka matlab</h3>
+        <ul>
+          <li>HTML/CSS se page banana seekhein, phir JavaScript se us page ke elements badlein aur user interactions sambhalein.</li>
+          <li>Git changes ka history rakhta hai; DevTools errors dekhne mein; npm project tools/dependencies sambhalne mein madad karte hain.</li>
+          <li>Testing se pata chalta hai ki code alag inputs par sahi chal raha hai. Chhote functions test aur reuse karna aasaan hota hai.</li>
+          <li>React/Vue user interface banane ke tools hain; Node.js/Express server-side JavaScript ke liye; TypeScript JavaScript mein static type checking jodta hai. Sab ek saath seekhna zaroori nahi.</li>
+          <li>Chhote projects concepts ko jodte hain aur portfolio mein dikhane layak kaam dete hain.</li>
+        </ul>
+      </div>
+      <div class="tip">JavaScript mein “sab kuch” ek baar mein yaad karna zaroori nahi. Basics samajhkar projects banana, errors padhna aur documentation dekhna sabse achha learning path hai.</div>
+    </section>
+  </main>
+
+  <footer>
+    <p>Yeh ek beginner-to-advanced learning roadmap hai, har JavaScript API ki poori reference nahi. Examples ko khud run aur modify karke seekhein.</p>
+  </footer>
+</body>
+</html>
